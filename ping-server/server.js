@@ -68,3 +68,5 @@ process.once('SIGTERM', () => {
   server.close(() => process.exit(0));
 });
 
+module.exports = app;
+
