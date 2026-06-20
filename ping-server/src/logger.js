@@ -46,10 +46,24 @@ function getName(mobileOrName) {
 function writeLog(level, message) {
   const timestamp = new Date().toISOString();
   const logLine = `[${timestamp}] [${level}] ${message}\n`;
+  
+  if (process.env.VERCEL) {
+    if (level === 'ERROR') {
+      console.error(logLine.trim());
+    } else {
+      console.log(logLine.trim());
+    }
+    return;
+  }
+
   try {
     fs.appendFileSync(LOG_FILE, logLine);
   } catch (err) {
-    console.error('Failed to write to log file:', err);
+    if (level === 'ERROR') {
+      console.error(logLine.trim());
+    } else {
+      console.log(logLine.trim());
+    }
   }
 }
 

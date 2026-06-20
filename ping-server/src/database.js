@@ -3,7 +3,7 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
-const rawDbPath = process.env.DB_PATH || './ping.db';
+const rawDbPath = process.env.DB_PATH || (process.env.VERCEL ? '/tmp/ping.db' : './ping.db');
 const DB_PATH = path.isAbsolute(rawDbPath)
   ? rawDbPath
   : path.resolve(__dirname, '..', rawDbPath);
