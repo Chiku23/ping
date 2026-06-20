@@ -3,7 +3,13 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
-const rawDbPath = process.env.DB_PATH || (process.env.VERCEL ? '/tmp/ping.db' : './ping.db');
+let rawDbPath = process.env.DB_PATH || (process.env.VERCEL ? '/tmp/ping.db' : './ping.db');
+
+// If on Vercel and the path is relative, force it to be inside /tmp
+if (process.env.VERCEL && !path.isAbsolute(rawDbPath)) {
+  rawDbPath = path.join('/tmp', path.basename(rawDbPath));
+}
+
 const DB_PATH = path.isAbsolute(rawDbPath)
   ? rawDbPath
   : path.resolve(__dirname, '..', rawDbPath);
@@ -18,6 +24,7 @@ let db;
 
 function getDb() {
   if (!db) {
+    console.log(`[DB] Connecting to SQLite database at: ${DB_PATH}`);
     db = new Database(DB_PATH);
     db.pragma('journal_mode = DELETE');
     db.pragma('foreign_keys = ON');
