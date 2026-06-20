@@ -1,0 +1,9 @@
+{
+  "appId": "com.ping.app",
+  "appName": "Ping",
+  "webDir": "dist/angularapp/browser",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  }
+}

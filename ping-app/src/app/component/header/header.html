@@ -1,0 +1,46 @@
+<header class="bg-[#111e25]/90 border-b border-[#222e35]/70 backdrop-blur-md px-6 h-16 flex items-center justify-between select-none relative z-20">
+  <!-- Left: Brand / Logo -->
+  <div class="flex items-center gap-3">
+    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-[var(--primary)] to-[var(--primary-dark)] shadow-md shadow-[var(--primary)]/20 hover:scale-105 transition-all">
+      <fa-icon [icon]="faHexagonNodes" class="text-white text-xl" />
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="flex flex-col">
+        <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-[var(--primary)] to-[var(--primary-light)] bg-clip-text text-transparent">
+          PING
+        </span>
+        <span class="text-[10px] text-[#8696a0] font-semibold tracking-widest uppercase">Chatroom</span>
+      </div>
+      <!-- Refresh Button (Mobile only or visible on mobile/app) -->
+      <button 
+        (click)="refreshPage()"
+        class="md:hidden w-8 h-8 rounded-full flex items-center justify-center text-[#aebac1] hover:text-[var(--primary)] hover:bg-[#374248] active:scale-90 transition-all cursor-pointer"
+        title="Refresh Page"
+      >
+        <fa-icon [icon]="faSync" class="text-sm animate-pulse" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Right: Actions and User Profile -->
+  <div class="flex items-center gap-3.5">
+    
+    <!-- Settings Button -->
+    <button 
+      (click)="goToSettings()"
+      class="w-9 h-9 rounded-full flex items-center justify-center text-[#aebac1] hover:text-[var(--primary)] hover:bg-[#374248] active:scale-90 transition-all cursor-pointer" 
+      title="Settings"
+    >
+      <fa-icon [icon]="faCog" class="text-base" />
+    </button>
+
+    <!-- User Profile Details (Readonly Avatar) -->
+    <div 
+      class="relative w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center text-white font-semibold text-sm shadow-md shadow-[var(--primary)]/10 select-none"
+      title="Profile Avatar"
+    >
+      {{ chatService.currentUser()?.name?.substring(0, 2)?.toUpperCase() || 'AC' }}
+    </div>
+
+  </div>
+</header>

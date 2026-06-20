@@ -1,0 +1,15 @@
+{
+  "name": "ping-workspace",
+  "version": "1.0.0",
+  "description": "Ping Chat Application Workspace",
+  "scripts": {
+    "start:backend": "npm --prefix ping-server run start",
+    "start:frontend": "npm --prefix ping-app run start",
+    "dev": "npx --yes concurrently --kill-others-on-fail \"npm run start:backend\" \"npm run start:frontend\"",
+    "start": "npx --yes concurrently --kill-others-on-fail \"npm run start:backend\" \"npm run start:frontend\"",
+    "build:android": "npm --prefix ping-app run build && npm --prefix ping-app run android:sync"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

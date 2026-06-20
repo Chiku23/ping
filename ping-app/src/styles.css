@@ -1,0 +1,135 @@
+@import 'tailwindcss';
+
+:root {
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --primary-dark: #5b21b6;
+  --primary-light: #c084fc;
+  --bubble-self: #4c1d95;
+  --bubble-other: #1e1b4b;
+  --glow: rgba(139, 92, 246, 0.15);
+}
+
+.theme-purple {
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --primary-dark: #5b21b6;
+  --primary-light: #c084fc;
+  --bubble-self: #4c1d95;
+  --bubble-other: #1e1b4b;
+  --glow: rgba(139, 92, 246, 0.15);
+}
+
+.theme-emerald {
+  --primary: #00a884;
+  --primary-hover: #008f6f;
+  --primary-dark: #005c4b;
+  --primary-light: #53bdeb;
+  --bubble-self: #005c4b;
+  --bubble-other: #202c33;
+  --glow: rgba(0, 168, 132, 0.15);
+}
+
+.theme-cyberpunk {
+  --primary: #ff007f;
+  --primary-hover: #e00070;
+  --primary-dark: #99004d;
+  --primary-light: #39ff14;
+  --bubble-self: #5c002e;
+  --bubble-other: #0d1b2a;
+  --glow: rgba(255, 0, 127, 0.2);
+}
+
+.theme-sunset {
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-dark: #c2410c;
+  --primary-light: #fde047;
+  --bubble-self: #431407;
+  --bubble-other: #271815;
+  --glow: rgba(249, 115, 22, 0.15);
+}
+
+.theme-blue {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-dark: #1e40af;
+  --primary-light: #60a5fa;
+  --bubble-self: #1e3a8a;
+  --bubble-other: #0f172a;
+  --glow: rgba(59, 130, 246, 0.15);
+}
+
+.theme-rose {
+  --primary: #f43f5e;
+  --primary-hover: #e11d48;
+  --primary-dark: #9f1239;
+  --primary-light: #fda4af;
+  --bubble-self: #4c0519;
+  --bubble-other: #1f1115;
+  --glow: rgba(244, 63, 94, 0.15);
+}
+
+.theme-emerald-sage {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-dark: #065f46;
+  --primary-light: #a7f3d0;
+  --bubble-self: #064e3b;
+  --bubble-other: #1c2826;
+  --glow: rgba(16, 185, 129, 0.15);
+}
+
+.theme-teal {
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-dark: #115e59;
+  --primary-light: #2dd4bf;
+  --bubble-self: #134e4a;
+  --bubble-other: #111d20;
+  --glow: rgba(13, 148, 136, 0.15);
+}
+
+.theme-nord {
+  --primary: #88c0d0;
+  --primary-hover: #81a1c1;
+  --primary-dark: #5e81ac;
+  --primary-light: #8fbcbb;
+  --bubble-self: #2e3440;
+  --bubble-other: #3b4252;
+  --glow: rgba(136, 192, 208, 0.15);
+}
+
+.theme-lavender {
+  --primary: #a78bfa;
+  --primary-hover: #8b5cf6;
+  --primary-dark: #6d28d9;
+  --primary-light: #ddd6fe;
+  --bubble-self: #3b0764;
+  --bubble-other: #1e1b24;
+  --glow: rgba(167, 139, 250, 0.15);
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #080d10;
+}
+
+/* Custom global scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b141a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374248;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f5d64;
+}

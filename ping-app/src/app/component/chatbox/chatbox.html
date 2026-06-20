@@ -1,0 +1,172 @@
+@if (chatService.activeChat(); as activeChat) {
+  <div class="chatbox flex flex-col h-full bg-[#0b141a] select-none text-slate-100 relative">
+    
+    <!-- Active Chat Header -->
+    <div class="bg-[#202c33] h-[60px] flex items-center justify-between px-4 py-2 border-b border-[#222e35] flex-shrink-0">
+      <div class="flex items-center gap-3">
+        <!-- Mobile Back Button -->
+        <button 
+          (click)="chatService.closeChatMobile()"
+          class="md:hidden text-[#aebac1] hover:text-white mr-1 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#374248] active:scale-90 transition-all cursor-pointer"
+          title="Back to contact list"
+        >
+          <fa-icon [icon]="faArrowLeft" class="text-base" />
+        </button>
+        <!-- Contact Avatar -->
+        <div [ngClass]="activeChat.avatarBg" class="w-10 h-10 rounded-xl bg-gradient-to-tr flex items-center justify-center text-white font-bold text-sm shadow-md">
+          {{ activeChat.avatarInitials }}
+        </div>
+        <!-- Contact Info -->
+        <div class="flex flex-col text-left">
+          <h3 class="text-sm font-bold text-[#e9edef] leading-tight tracking-wide">
+            {{ activeChat.name }}
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages List -->
+    <div 
+      #scrollContainer
+      class="flex-1 overflow-y-auto p-4 md:p-6 space-y-3.5 scrollbar-thin scrollbar-thumb-[#374248] relative flex flex-col"
+      style="background-color: #0b141a; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.02\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm1-61c3.148 0 5.7-2.552 5.7-5.7 0-3.148-2.552-5.7-5.7-5.7-3.148 0-5.7 2.552-5.7 5.7 0 3.148 2.552 5.7 5.7 5.7zm4 47c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM25 54c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm43-36c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM4.7 65.7c2.044 0 3.7-1.656 3.7-3.7s-1.656-3.7-3.7-3.7-3.7 1.656-3.7 3.7 1.656 3.7 3.7 3.7zM70 80c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z\'/%3E%3C/g%3E%3C/svg%3E');"
+    >
+      
+      <!-- Messages Loop -->
+      @for (msg of activeChat.messages; track msg.id) {
+        <div 
+          [ngClass]="{ 
+            'ml-auto': msg.isSelf, 
+            'mr-auto': !msg.isSelf 
+          }"
+          class="flex flex-col max-w-[70%] sm:max-w-[65%] group"
+        >
+          <!-- Message Bubble -->
+          <div 
+            [ngClass]="msg.isSelf ? 
+              'bg-[var(--bubble-self)] text-[#e9edef] rounded-2xl rounded-tr-none shadow-sm' : 
+              'bg-[var(--bubble-other)] text-[#e9edef] rounded-2xl rounded-tl-none shadow-sm'"
+            class="px-4 py-2 text-[14.5px] leading-normal relative select-text"
+          >
+            <!-- Body text (with padding bottom to guarantee timestamp never overlaps) -->
+            <p class="whitespace-pre-wrap break-words pb-3 pr-4">
+              {{ msg.message }}
+            </p>
+            
+            <!-- Timestamp (bottom right aligned) -->
+            <div class="absolute bottom-1 right-3 flex items-center gap-1 select-none">
+              <span class="text-[9.5px] text-[#8696a0]/80 font-normal leading-none">
+                {{ msg.time }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <!-- Chat Input Footer -->
+    <div class="bg-[#202c33] px-4 py-2.5 flex items-center gap-3 border-t border-[#222e35] flex-shrink-0 relative">
+      
+      <!-- Emoji Picker Toggle Button -->
+      <button 
+        (click)="showEmojiPicker.update(v => !v)"
+        class="emoji-toggle-btn text-[#aebac1] hover:text-white bg-transparent w-9 h-9 rounded-full flex items-center justify-center hover:bg-[#374248] transition-all cursor-pointer flex-shrink-0"
+        title="Emojis"
+      >
+        <fa-icon [icon]="faSmile" class="text-xl" />
+      </button>
+
+      <!-- Emoji Picker Grid Popup -->
+      @if (showEmojiPicker()) {
+        <div class="emoji-container absolute bottom-14 left-4 bg-[#233138] border border-[#2f3b43] p-3 rounded-2xl shadow-2xl z-50 flex flex-col gap-2 max-w-[320px] animate-scale-in">
+          
+          <!-- Recent Emojis Section -->
+          @if (recentEmojis().length > 0) {
+            <div class="text-[10px] font-bold text-[var(--primary)] uppercase tracking-wider mb-0.5 flex items-center gap-1 select-none">
+              <span>🕒</span> <span>Recent</span>
+            </div>
+            <div class="grid grid-cols-8 gap-1">
+              @for (emoji of recentEmojis(); track emoji) {
+                <button 
+                  type="button"
+                  (click)="addEmoji(emoji)" 
+                  class="text-xl p-1 hover:bg-[#182229] rounded-lg transition-all cursor-pointer hover:scale-110 active:scale-95 text-center flex items-center justify-center"
+                >
+                  {{ emoji }}
+                </button>
+              }
+            </div>
+            <div class="border-t border-[#2f3b43] my-0.5"></div>
+          }
+          
+          <!-- All Emojis Section -->
+          <div class="text-[10px] font-bold text-[#8696a0] uppercase tracking-wider mb-0.5 flex items-center gap-1 select-none">
+            <span>😀</span> <span>All Emojis</span>
+          </div>
+          <div class="grid grid-cols-8 gap-1 max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-[#374248]">
+            @for (emoji of emojis; track emoji) {
+              <button 
+                type="button"
+                (click)="addEmoji(emoji)" 
+                class="text-xl p-1 hover:bg-[#182229] rounded-lg transition-all cursor-pointer hover:scale-110 active:scale-95 text-center flex items-center justify-center"
+              >
+                {{ emoji }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Input box -->
+      <div class="flex-grow relative">
+        <input 
+          type="text" 
+          placeholder="Type a message" 
+          [(ngModel)]="messageText"
+          (keyup.enter)="onSend()"
+          class="w-full bg-[#2a3942] text-slate-200 placeholder-[#8696a0] text-[15px] rounded-lg px-4 py-2 border border-transparent focus:border-[#00a884]/40 focus:bg-[#2e3e48] transition-all focus:outline-none"
+        />
+      </div>
+
+      <!-- Send Trigger -->
+      <button 
+        (click)="onSend()"
+        class="text-[#aebac1] hover:text-[#00a884] bg-transparent w-9 h-9 rounded-full flex items-center justify-center hover:bg-[#374248] active:scale-90 transition-all cursor-pointer flex-shrink-0"
+        title="Send"
+      >
+        <fa-icon [icon]="faPaperPlane" class="text-lg" />
+      </button>
+    </div>
+
+  </div>
+} @else {
+  <!-- Welcome Screen -->
+  <div class="h-full bg-[#070c0e] flex flex-col items-center justify-center text-center p-8 select-none text-slate-100 relative overflow-hidden">
+    <!-- Glowing background blur decorations -->
+    <div class="absolute w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-[120px] -top-20 -left-20 pointer-events-none"></div>
+    <div class="absolute w-96 h-96 bg-[var(--primary-light)]/5 rounded-full blur-[120px] -bottom-20 -right-20 pointer-events-none"></div>
+
+    <div class="max-w-md flex flex-col items-center justify-center space-y-6 relative z-10">
+      <!-- Animated Logo Card -->
+      <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-[var(--primary)] to-[var(--primary-light)] flex items-center justify-center shadow-xl shadow-[var(--primary)]/20 hover:scale-105 hover:rotate-6 transition-all duration-300 mb-2 cursor-default">
+        <fa-icon [icon]="faSmile" class="text-slate-900 text-5xl" />
+      </div>
+
+      <!-- Welcome Details -->
+      <div class="space-y-3">
+        <h2 class="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-[var(--primary)] to-[var(--primary-light)] bg-clip-text text-transparent">Ping Web</h2>
+        <p class="text-sm text-[#8696a0] leading-relaxed max-w-sm mx-auto">
+          Connect seamlessly across all your devices. Select a contact from the list or start a new chat using their mobile number.
+        </p>
+      </div>
+
+      <!-- Quick Action Hint -->
+      <div class="pt-4">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#18252d] border border-[#26353e] text-xs text-[var(--primary)] font-medium shadow-sm">
+          <span>✨</span> Secure End-to-End Environment
+        </span>
+      </div>
+    </div>
+  </div>
+}

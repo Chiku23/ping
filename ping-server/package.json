@@ -1,0 +1,26 @@
+{
+  "name": "ping-backend",
+  "version": "1.0.0",
+  "description": "Node.js Express + WebSocket backend API for the Ping chat application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "chat",
+    "websocket",
+    "express",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^5.1.0",
+    "firebase-admin": "^14.0.0",
+    "ws": "^8.18.0"
+  }
+}

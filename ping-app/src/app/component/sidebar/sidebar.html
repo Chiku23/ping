@@ -1,0 +1,110 @@
+<div class="sidebar flex flex-col h-full bg-[#111b21] border-r border-[#222e35] select-none text-slate-100">
+
+
+
+  <!-- Add Contact Drawer/Panel -->
+  @if (chatService.showAddContact()) {
+  <div class="bg-[#202c33] p-4 border-b border-[#222e35] space-y-3 text-left animate-slide-down">
+    <div class="flex items-center justify-between border-b border-[#222e35]/80 pb-2">
+      <span class="text-xs font-bold text-[var(--primary)] uppercase tracking-wider flex items-center gap-1.5">
+        <fa-icon [icon]="faUserPlus" />
+        <span>Add New Contact</span>
+      </span>
+      <button (click)="toggleAddContact()" class="text-[#8696a0] hover:text-[var(--primary)] transition-colors cursor-pointer">
+        <fa-icon [icon]="faTimes" />
+      </button>
+    </div>
+
+    @if (addContactError()) {
+    <div class="text-[11px] text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-1.5 rounded">
+      {{ addContactError() }}
+    </div>
+    }
+
+    <div class="space-y-2 text-xs">
+      <div>
+        <label class="text-[#8696a0] block mb-1">Mobile Number</label>
+        <input type="tel" [(ngModel)]="newContactMobile" placeholder="e.g. +1234567890"
+          class="w-full bg-[#2a3942] text-slate-200 placeholder-[#8696a0] rounded-xl px-2.5 py-1.5 border border-transparent focus:border-[var(--primary)] focus:outline-none" />
+      </div>
+      <button (click)="addContact()"
+        class="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] hover:from-[var(--primary-light)] hover:to-[var(--primary)] active:scale-95 text-[#070c0e] font-extrabold py-2 rounded-xl w-full mt-2 transition-all cursor-pointer text-center block shadow-md shadow-[var(--primary)]/10">
+        Initiate Chat
+      </button>
+    </div>
+  </div>
+  }
+
+  <!-- Search Bar -->
+  <div class="bg-[#111b21] p-2 flex items-center gap-2 border-b border-[#222e35]/80 flex-shrink-0">
+    <div
+      class="flex items-center bg-[#202c33] rounded-xl px-3 py-1.5 gap-3 flex-grow border border-transparent focus-within:border-[var(--primary)]/40 focus-within:bg-[#2a3942] transition-all">
+      <fa-icon [icon]="faSearch" class="text-[#8696a0] text-sm" />
+      <input type="text" placeholder="Search or start new chat" (input)="onSearch($event)"
+        [value]="chatService.searchQuery()"
+        class="bg-transparent text-slate-200 placeholder-[#8696a0] text-sm w-full focus:outline-none" />
+    </div>
+    
+    <!-- Add Contact Plus Button -->
+    <button 
+      (click)="toggleAddContact()"
+      class="w-9 h-9 rounded-full flex items-center justify-center text-[#aebac1] hover:text-[var(--primary)] hover:bg-[#202c33] active:scale-90 transition-all cursor-pointer flex-shrink-0"
+      title="Add new contact"
+    >
+      <fa-icon [icon]="faPlus" class="text-base" />
+    </button>
+  </div>
+
+  <!-- Chat List -->
+  <div class="flex-1 overflow-y-auto py-2 space-y-1.5 scrollbar-thin scrollbar-thumb-[#374248]">
+
+    @if (chatService.filteredChats().length === 0) {
+    <div class="flex flex-col items-center justify-center h-48 text-[#8696a0] px-6 text-center">
+      <p class="text-sm font-medium">No chats found</p>
+      <p class="text-xs mt-1">Try entering a contact mobile number above.</p>
+    </div>
+    }
+
+    @for (chat of chatService.filteredChats(); track chat.id) {
+    <div (click)="selectChat(chat.id)" [ngClass]="{
+          'bg-gradient-to-r from-[#1d2c35] to-[#16242c] border-l-[4px] border-[var(--primary)] shadow-md': chatService.activeChatId() === chat.id,
+          'hover:bg-[#18262f]/60 border-l-[4px] border-transparent': chatService.activeChatId() !== chat.id
+        }" class="flex items-center gap-3 mx-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 select-none group">
+      <!-- Avatar Section -->
+      <div class="relative flex-shrink-0">
+        <div [ngClass]="chat.avatarBg"
+          class="w-11 h-11 rounded-xl bg-gradient-to-tr flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform duration-200">
+          {{ chat.avatarInitials }}
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-baseline justify-between">
+          <h4 class="text-[14.5px] text-[#e9edef] font-medium truncate group-hover:text-white transition-colors">
+            {{ chat.name }}
+          </h4>
+          <span class="text-[11px] text-[#8696a0]">
+            {{ chat.time }}
+          </span>
+        </div>
+
+        <div class="flex items-center justify-between mt-0.5">
+          <p class="text-[#8696a0] text-[13px] truncate flex-grow pr-2 group-hover:text-slate-300 transition-colors">
+            {{ chat.lastMessage }}
+          </p>
+
+          <!-- Unread Badge -->
+          @if (chat.unreadCount > 0) {
+          <span
+            class="bg-[var(--primary)] text-[#111b21] font-bold text-[11px] rounded-full min-w-5 h-5 flex items-center justify-center px-1.5 flex-shrink-0">
+            {{ chat.unreadCount }}
+          </span>
+          }
+        </div>
+      </div>
+
+    </div>
+    }
+  </div>
+</div>

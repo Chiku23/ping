@@ -1,0 +1,12 @@
+<div [ngClass]="'theme-' + chatService.selectedTheme()" class="bg-[#080d10] text-slate-100 h-screen w-full flex flex-col overflow-hidden">
+  @if (chatService.activeView() === 'login') {
+    <app-login />
+  } @else if (chatService.activeView() === 'settings') {
+    <app-header />
+    <app-settings class="flex-1 min-h-0" />
+  } @else {
+    <app-header />
+    <app-home class="flex-1 min-h-0" />
+  }
+  <router-outlet />
+</div>

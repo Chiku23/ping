@@ -1,0 +1,23 @@
+<div class="home-wrapper bg-[#111b21] flex h-full overflow-hidden w-full">
+  <!-- Sidebar Panel: Hidden on mobile when chat is active -->
+  <div 
+    [ngClass]="{
+      'hidden md:block': chatService.showChatMobile(),
+      'block': !chatService.showChatMobile()
+    }"
+    class="sidebar-wrapper w-full md:w-[30%] md:min-w-[340px] md:max-w-[450px] h-full flex-shrink-0"
+  >
+    <app-sidebar />
+  </div>
+
+  <!-- Chatbox Panel: Hidden on mobile when chat is inactive -->
+  <div 
+    [ngClass]="{
+      'block': chatService.showChatMobile(),
+      'hidden md:block': !chatService.showChatMobile()
+    }"
+    class="chatBox-wrapper w-full md:grow h-full overflow-hidden border-l border-[#222e35]"
+  >
+    <app-chatbox />
+  </div>
+</div>
