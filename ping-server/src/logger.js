@@ -45,24 +45,21 @@ function getName(mobileOrName) {
  */
 function writeLog(level, message) {
   const timestamp = new Date().toISOString();
-  const logLine = `[${timestamp}] [${level}] ${message}\n`;
+  const logLine = `[${timestamp}] [${level}] ${message}`;
   
-  if (process.env.VERCEL) {
-    if (level === 'ERROR') {
-      console.error(logLine.trim());
-    } else {
-      console.log(logLine.trim());
-    }
-    return;
+  // Always log to console so Vercel dashboard captures it
+  if (level === 'ERROR') {
+    console.error(logLine);
+  } else {
+    console.log(logLine);
   }
 
-  try {
-    fs.appendFileSync(LOG_FILE, logLine);
-  } catch (err) {
-    if (level === 'ERROR') {
-      console.error(logLine.trim());
-    } else {
-      console.log(logLine.trim());
+  // Skip file logging entirely on Vercel
+  if (!process.env.VERCEL) {
+    try {
+      fs.appendFileSync(LOG_FILE, logLine + '\n');
+    } catch (err) {
+      // Fail silently to avoid clogging console output in other read-only environments
     }
   }
 }
