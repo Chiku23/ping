@@ -5,11 +5,30 @@ const logger = require('./logger');
 let messaging = null;
 
 try {
-  const serviceAccountPath = path.resolve(__dirname, '..', 'firebase-service-account.json');
-  if (fs.existsSync(serviceAccountPath)) {
+  let serviceAccount = null;
+
+  // 1. Try to load from environment variable (for production/Vercel)
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    try {
+      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      logger.logInfo('[Push] Loading Firebase service account from environment variable');
+    } catch (parseErr) {
+      logger.logError('[Push] Failed to parse FIREBASE_SERVICE_ACCOUNT env variable', parseErr);
+    }
+  }
+
+  // 2. Fallback to local file (for local development)
+  if (!serviceAccount) {
+    const serviceAccountPath = path.resolve(__dirname, '..', 'firebase-service-account.json');
+    if (fs.existsSync(serviceAccountPath)) {
+      serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
+      logger.logInfo('[Push] Loading Firebase service account from local file');
+    }
+  }
+
+  if (serviceAccount) {
     const { initializeApp, cert } = require('firebase-admin/app');
     const { getMessaging } = require('firebase-admin/messaging');
-    const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
     
     const app = initializeApp({
       credential: cert(serviceAccount)
@@ -18,7 +37,7 @@ try {
     messaging = getMessaging(app);
     logger.logInfo('[Push] Firebase Admin SDK initialized successfully for FCM v1');
   } else {
-    logger.logInfo('[Push] No firebase-service-account.json found in backend. Using Push Mock mode.');
+    logger.logInfo('[Push] No Firebase service account config found. Using Push Mock mode.');
   }
 } catch (err) {
   logger.logError('[Push] Failed to initialize Firebase Admin SDK', err);
